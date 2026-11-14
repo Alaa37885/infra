@@ -37,6 +37,13 @@ dependencies:
   cached_network_image: ^3.4.1
   http: ^1.2.0
   url_launcher: ^6.3.1
+  camera: ^0.11.0+2
+  geolocator: ^13.0.1
+  google_maps_flutter: ^2.10.0
+  flutter_map: ^7.0.2
+  latlong2: ^0.9.1
+  flutter_bloc: ^8.1.6
+  bloc: ^8.1.4
 
 dev_dependencies:
   flutter_test:
@@ -66,6 +73,10 @@ flutter:
     - assets/شعار الطريق والأفق.png
     - assets/علم مصر.png
     - assets/شعار.png
+    - assets/onboarding1.jpg
+    - assets/onboarding2.jpg
+    - assets/onboarding3.jpg
+    - assets/كاميرا الطريق.png
 
 
   # An image asset can refer to one or more resolution-specific "variants", see

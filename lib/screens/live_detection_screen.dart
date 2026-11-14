@@ -41,7 +41,7 @@ class _LiveDetectionScreenState extends State<LiveDetectionScreen> with SingleTi
 
           // Dark Overlay for contrast
           Container(
-            color: Colors.black.withOpacity(0.3),
+            color: Colors.black.withValues(alpha:0.3),
           ),
 
           // Top Header / Status bar
@@ -54,7 +54,7 @@ class _LiveDetectionScreenState extends State<LiveDetectionScreen> with SingleTi
                   Container(
                     padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                     decoration: BoxDecoration(
-                      color: AppColors.background.withOpacity(0.7),
+                      color: AppColors.background.withValues(alpha:0.7),
                       borderRadius: BorderRadius.circular(20),
                       border: Border.all(color: AppColors.surfaceGlassBorder),
                     ),
@@ -82,7 +82,7 @@ class _LiveDetectionScreenState extends State<LiveDetectionScreen> with SingleTi
                   Container(
                     padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                     decoration: BoxDecoration(
-                      color: AppColors.background.withOpacity(0.7),
+                      color: AppColors.background.withValues(alpha:0.7),
                       borderRadius: BorderRadius.circular(20),
                       border: Border.all(color: AppColors.surfaceGlassBorder),
                     ),
@@ -121,7 +121,7 @@ class _LiveDetectionScreenState extends State<LiveDetectionScreen> with SingleTi
                   decoration: BoxDecoration(
                     border: Border.all(color: AppColors.red, width: 2.5),
                     borderRadius: BorderRadius.circular(6),
-                    color: AppColors.red.withOpacity(0.15),
+                    color: AppColors.red.withValues(alpha:0.15),
                   ),
                 ),
               ],
@@ -149,7 +149,7 @@ class _LiveDetectionScreenState extends State<LiveDetectionScreen> with SingleTi
                   decoration: BoxDecoration(
                     border: Border.all(color: AppColors.gold, width: 2.5),
                     borderRadius: BorderRadius.circular(6),
-                    color: AppColors.gold.withOpacity(0.15),
+                    color: AppColors.gold.withValues(alpha:0.15),
                   ),
                 ),
               ],
@@ -166,12 +166,12 @@ class _LiveDetectionScreenState extends State<LiveDetectionScreen> with SingleTi
               child: Container(
                 padding: const EdgeInsets.all(18),
                 decoration: BoxDecoration(
-                  color: AppColors.background.withOpacity(0.85),
+                  color: AppColors.background.withValues(alpha:0.85),
                   borderRadius: BorderRadius.circular(20),
                   border: Border.all(color: AppColors.surfaceGlassBorder),
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.black.withOpacity(0.5),
+                      color: Colors.black.withValues(alpha:0.5),
                       blurRadius: 20,
                       offset: const Offset(0, 10),
                     ),

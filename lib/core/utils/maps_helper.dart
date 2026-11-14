@@ -16,9 +16,8 @@ class MapsHelper {
       } else {
         throw 'Could not launch map url';
       }
-    } catch (e) {
-      // Fallback or print error
-      print('Error launching maps: $e');
+    } catch (_) {
+      // Ignore launch errors in simulation / offline mode
     }
   }
 }

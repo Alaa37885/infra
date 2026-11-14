@@ -3,10 +3,11 @@ import 'package:inframind/features/road_issues/domain/entities/road_issue.dart';
 import 'package:inframind/features/road_issues/domain/usecases/get_road_issues.dart';
 import 'package:inframind/theme/app_theme.dart';
 import 'package:inframind/screens/home_screen.dart';
-import 'package:inframind/screens/live_detection_screen.dart';
+import 'package:inframind/features/live_scanner/presentation/screens/live_road_scanner_screen.dart';
 import 'package:inframind/screens/map_screen.dart';
 import 'package:inframind/screens/reports_screen.dart';
 import 'package:inframind/screens/settings_screen.dart';
+import 'package:inframind/screens/add_report_screen.dart';
 
 class MainNavigation extends StatefulWidget {
   const MainNavigation({super.key, required this.getRoadIssues});
@@ -33,12 +34,18 @@ class _MainNavigationState extends State<MainNavigation> {
     });
   }
 
+  void _refreshData() {
+    setState(() {
+      _roadIssues = widget.getRoadIssues();
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final List<Widget> screens = [
-      HomeScreen(onNavigateTab: _onTabTapped, roadIssues: _roadIssues),
-      const LiveDetectionScreen(),
-      MapScreen(roadIssues: _roadIssues),
+      HomeScreen(onNavigateTab: _onTabTapped, roadIssues: _roadIssues, onRefresh: _refreshData),
+      const LiveRoadScannerScreen(),
+      MapScreen(roadIssues: _roadIssues, onRefresh: _refreshData),
       ReportsScreen(roadIssues: _roadIssues),
       const SettingsScreen(),
     ];
@@ -48,13 +55,26 @@ class _MainNavigationState extends State<MainNavigation> {
         index: _currentIndex,
         children: screens,
       ),
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: () {
+          Navigator.of(context).push(
+            MaterialPageRoute(builder: (context) => const AddReportScreen()),
+          ).then((_) => _refreshData());
+        },
+        backgroundColor: AppColors.gold,
+        foregroundColor: AppColors.background,
+        elevation: 6,
+        icon: const Icon(Icons.add_circle_outline_rounded),
+        label: const Text('أضف بلاغ', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13)),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       bottomNavigationBar: Container(
         decoration: BoxDecoration(
           color: AppColors.surface,
           border: Border(top: BorderSide(color: AppColors.surfaceGlassBorder, width: 1)),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.3),
+              color: Colors.black.withValues(alpha: 0.3),
               blurRadius: 10,
               offset: const Offset(0, -4),
             ),

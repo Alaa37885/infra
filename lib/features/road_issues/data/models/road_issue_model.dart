@@ -11,6 +11,8 @@ class RoadIssueModel {
     required this.confidence,
     this.imageUrl,
     this.thumbnailUrl,
+    this.latitude,
+    this.longitude,
   });
 
   final String id;
@@ -22,6 +24,8 @@ class RoadIssueModel {
   final double confidence;
   final String? imageUrl;
   final String? thumbnailUrl;
+  final double? latitude;
+  final double? longitude;
 
   factory RoadIssueModel.fromJson(Map<String, dynamic> json) {
     return RoadIssueModel(
@@ -34,6 +38,8 @@ class RoadIssueModel {
       confidence: (json['confidence'] as num?)?.toDouble() ?? 0.85,
       imageUrl: json['image_url'],
       thumbnailUrl: json['thumbnail_url'],
+      latitude: (json['latitude'] as num?)?.toDouble(),
+      longitude: (json['longitude'] as num?)?.toDouble(),
     );
   }
 
@@ -47,5 +53,7 @@ class RoadIssueModel {
         confidence: confidence,
         imageUrl: imageUrl,
         thumbnailUrl: thumbnailUrl,
+        latitude: latitude,
+        longitude: longitude,
       );
 }

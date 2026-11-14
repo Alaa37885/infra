@@ -13,7 +13,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
   bool _autoSave = true;
   bool _offlineMode = false;
   String _videoQuality = '4K 60FPS (عالي الدقة)';
-  String _language = 'العربية (مصر)';
+  final String _language = 'العربية (مصر)';
 
   @override
   Widget build(BuildContext context) {
@@ -55,7 +55,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       Container(
                         padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
                         decoration: BoxDecoration(
-                          color: AppColors.gold.withOpacity(0.2),
+                          color: AppColors.gold.withValues(alpha:0.2),
                           borderRadius: BorderRadius.circular(4),
                         ),
                         child: const Text('مهندس فحص معتمد', style: TextStyle(fontSize: 10, color: AppColors.gold)),
@@ -94,8 +94,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   min: 50.0,
                   max: 95.0,
                   divisions: 9,
-                  activeColor: AppColors.gold,
-                  inactiveColor: AppColors.background,
+                                    inactiveColor: AppColors.background,
                   onChanged: (value) {
                     setState(() {
                       _confidenceThreshold = value;
@@ -125,16 +124,14 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   title: const Text('الحفظ التلقائي للبلاغات', style: TextStyle(fontSize: 14)),
                   subtitle: const Text('رفع البلاغات للخادم السحابي فور رصدها', style: TextStyle(fontSize: 11, color: AppColors.textGray)),
                   value: _autoSave,
-                  activeColor: AppColors.gold,
-                  onChanged: (val) => setState(() => _autoSave = val),
+                                    onChanged: (val) => setState(() => _autoSave = val),
                 ),
                 const Divider(color: Colors.white12, height: 1),
                 SwitchListTile(
                   title: const Text('الوضع المحلي (Offline Mode)', style: TextStyle(fontSize: 14)),
                   subtitle: const Text('حفظ البيانات محلياً في حالة ضعف الشبكة', style: TextStyle(fontSize: 11, color: AppColors.textGray)),
                   value: _offlineMode,
-                  activeColor: AppColors.gold,
-                  onChanged: (val) => setState(() => _offlineMode = val),
+                                    onChanged: (val) => setState(() => _offlineMode = val),
                 ),
                 const Divider(color: Colors.white12, height: 1),
                 ListTile(

@@ -13,6 +13,8 @@ class RoadIssue {
     required this.confidence,
     this.imageUrl,
     this.thumbnailUrl,
+    this.latitude,
+    this.longitude,
   });
 
   final String id;
@@ -24,4 +26,6 @@ class RoadIssue {
   final double confidence;
   final String? imageUrl;
   final String? thumbnailUrl;
+  final double? latitude;
+  final double? longitude;
 }

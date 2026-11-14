@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:inframind/features/road_issues/domain/usecases/get_road_issues.dart';
 import 'package:inframind/theme/app_theme.dart';
-import 'package:inframind/screens/main_navigation.dart';
+import 'package:inframind/screens/onboarding_screen.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key, required this.getRoadIssues});
@@ -34,7 +34,7 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
         Navigator.of(context).pushReplacement(
           PageRouteBuilder(
             pageBuilder: (context, animation, secondaryAnimation) =>
-              MainNavigation(getRoadIssues: widget.getRoadIssues),
+              OnboardingScreen(getRoadIssues: widget.getRoadIssues),
             transitionsBuilder: (context, animation, secondaryAnimation, child) {
               return FadeTransition(opacity: animation, child: child);
             },

@@ -363,7 +363,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
               // Horizontal List of Discoveries (API Driven)
               SizedBox(
-                height: 130,
+                height: 142,
                 child: FutureBuilder<List<RoadIssue>>(
                   future: widget.roadIssues,
                   builder: (context, snapshot) {
@@ -410,7 +410,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   },
                 ),
               ),
-              const SizedBox(height: 24),
+              const SizedBox(height: 20),
 
               // Big Golden CTA Button for Live Scan
               SizedBox(
@@ -523,7 +523,7 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ),
           Padding(
-            padding: const EdgeInsets.all(8.0),
+            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
