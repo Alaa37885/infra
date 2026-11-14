@@ -1,7 +1,6 @@
-import 'dart:convert';
+import 'package:camera/camera.dart';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
-import 'package:inframind/core/network/api_config.dart';
 
 class DetectedBox {
   const DetectedBox({
@@ -26,8 +25,8 @@ class DetectedBox {
 
   factory DetectedBox.fromJson(Map<String, dynamic> json) {
     return DetectedBox(
-      label: json['label'] ?? 'Pothole (D00)',
-      className: json['class_name'] ?? 'D00',
+      label: json['label'] ?? json['tag'] ?? 'Pothole (D00)',
+      className: json['class_name'] ?? json['tag'] ?? 'D00',
       confidence: (json['confidence'] as num?)?.toDouble() ?? 0.85,
       ymin: (json['ymin'] as num?)?.toDouble() ?? 0.3,
       xmin: (json['xmin'] as num?)?.toDouble() ?? 0.2,
@@ -54,40 +53,13 @@ class AiInferenceService {
 
   AiInferenceService({required this.client});
 
-  /// Sends camera frame bytes to FastAPI inference endpoint.
-  /// Falls back to simulated high-accuracy detections if network is unavailable.
-  Future<List<DetectedBox>> detectRoadIssues(Uint8List frameBytes, {double lat = 30.0444, double lng = 31.2357}) async {
-    try {
-      final uri = Uri.parse('${ApiConfig.baseUrl}${ApiConfig.liveDetectionStream}');
-      
-      // Construct multipart or JSON request
-      final request = http.MultipartRequest('POST', uri)
-        ..headers.addAll({
-          if (ApiConfig.authToken != null) 'Authorization': 'Bearer ${ApiConfig.authToken}',
-        })
-        ..fields['lat'] = lat.toString()
-        ..fields['lng'] = lng.toString()
-        ..files.add(http.MultipartFile.fromBytes('frame', frameBytes, filename: 'frame.jpg'));
-
-      final streamedResponse = await request.send().timeout(const Duration(seconds: 5));
-      final response = await http.Response.fromStream(streamedResponse);
-
-      if (response.statusCode == 200) {
-        final data = json.decode(response.body);
-        final List<dynamic> detectionsJson = data['detections'] ?? [];
-        return detectionsJson.map((d) => DetectedBox.fromJson(d)).toList();
-      } else {
-        // Fallback simulation for seamless experience
-        return _getSimulatedDetections();
-      }
-    } catch (e) {
-      debugPrint('AI Inference network error: $e, using simulated detections.');
-      return _getSimulatedDetections();
-    }
+  /// Simulates real-time AI detections locally for frontend-only preparation.
+  Future<List<DetectedBox>> detectRoadIssues(CameraImage image, {double lat = 30.0444, double lng = 31.2357}) async {
+    await Future.delayed(const Duration(milliseconds: 150));
+    return _getSimulatedDetections();
   }
 
   List<DetectedBox> _getSimulatedDetections() {
-    // Generate realistic YOLO road distress detections (D00: Pothole, D10: Longitudinal Crack, D20: Transverse Crack, D40: Alligator Crack)
     return [
       const DetectedBox(
         label: 'حفرة رئيسية (D00 Pothole)',
@@ -112,40 +84,24 @@ class AiInferenceService {
     ];
   }
 
-  /// Save road observation report to backend API
+  /// Save road observation report (Frontend-only mock implementation)
   Future<bool> saveRoadObservation({
     required List<DetectedBox> detections,
     required double lat,
     required double lng,
     required String address,
-    Uint8List? imageBytes,
   }) async {
     try {
-      final uri = Uri.parse('${ApiConfig.baseUrl}${ApiConfig.roadIssues}');
-      final body = json.encode({
-        'title': detections.isNotEmpty ? detections.first.label : 'رصد طريق آلي',
-        'location': address,
-        'latitude': lat,
-        'longitude': lng,
-        'severity': detections.isNotEmpty ? detections.first.severity : 'medium',
-        'confidence': detections.isNotEmpty ? detections.first.confidence : 0.9,
-        'detections_count': detections.length,
-        'timestamp': DateTime.now().toIso8601String(),
-      });
-
-      final response = await client.post(
-        uri,
-        headers: {
-          'Content-Type': 'application/json',
-          if (ApiConfig.authToken != null) 'Authorization': 'Bearer ${ApiConfig.authToken}',
-        },
-        body: body,
-      ).timeout(ApiConfig.timeout);
-
-      return response.statusCode == 200 || response.statusCode == 201;
+      await Future.delayed(const Duration(milliseconds: 500));
+      debugPrint('Road observation saved locally successfully (Frontend-only mock mode).');
+      return true;
     } catch (e) {
-      debugPrint('Error saving road observation: $e');
-      return true; // Return true for seamless user feedback in offline/demo mode
+      debugPrint('Error saving road observation locally: $e');
+      return true;
     }
+  }
+
+  void dispose() {
+    // Cleanup if needed
   }
 }

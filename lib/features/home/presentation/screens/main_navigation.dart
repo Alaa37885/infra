@@ -1,0 +1,119 @@
+import 'package:flutter/material.dart';
+import 'package:inframind/features/road_issues/domain/entities/road_issue.dart';
+import 'package:inframind/features/road_issues/domain/usecases/get_road_issues.dart';
+import 'package:inframind/theme/app_theme.dart';
+import 'package:inframind/features/home/presentation/screens/home_screen.dart';
+import 'package:inframind/features/live_scanner/presentation/screens/live_road_scanner_screen.dart';
+import 'package:inframind/features/map/presentation/screens/map_screen.dart';
+import 'package:inframind/features/road_reports/presentation/screens/reports_screen.dart';
+import 'package:inframind/features/profile/presentation/screens/settings_screen.dart';
+import 'package:inframind/features/road_reports/presentation/screens/add_report_screen.dart';
+
+class MainNavigation extends StatefulWidget {
+  const MainNavigation({super.key, required this.getRoadIssues});
+
+  final GetRoadIssues getRoadIssues;
+
+  @override
+  State<MainNavigation> createState() => _MainNavigationState();
+}
+
+class _MainNavigationState extends State<MainNavigation> {
+  int _currentIndex = 0;
+  late final Future<List<RoadIssue>> _roadIssues;
+
+  @override
+  void initState() {
+    super.initState();
+    _roadIssues = widget.getRoadIssues();
+  }
+
+  void _onTabTapped(int index) {
+    setState(() {
+      _currentIndex = index;
+    });
+  }
+
+  void _refreshData() {
+    setState(() {
+      _roadIssues = widget.getRoadIssues();
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final List<Widget> screens = [
+      HomeScreen(onNavigateTab: _onTabTapped, roadIssues: _roadIssues, onRefresh: _refreshData),
+      const LiveRoadScannerScreen(),
+      MapScreen(roadIssues: _roadIssues, onRefresh: _refreshData),
+      ReportsScreen(roadIssues: _roadIssues),
+      const SettingsScreen(),
+    ];
+
+    return Scaffold(
+      body: IndexedStack(
+        index: _currentIndex,
+        children: screens,
+      ),
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: () {
+          Navigator.of(context).push(
+            MaterialPageRoute(builder: (context) => const AddReportScreen()),
+          ).then((_) => _refreshData());
+        },
+        backgroundColor: AppColors.gold,
+        foregroundColor: AppColors.background,
+        elevation: 6,
+        icon: const Icon(Icons.add_circle_outline_rounded),
+        label: const Text('أضف بلاغ', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13)),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      bottomNavigationBar: Container(
+        decoration: BoxDecoration(
+          color: AppColors.surface,
+          border: Border(top: BorderSide(color: AppColors.surfaceGlassBorder, width: 1)),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withValues(alpha: 0.3),
+              blurRadius: 10,
+              offset: const Offset(0, -4),
+            ),
+          ],
+        ),
+        child: BottomNavigationBar(
+          currentIndex: _currentIndex,
+          onTap: _onTabTapped,
+          type: BottomNavigationBarType.fixed,
+          backgroundColor: Colors.transparent,
+          elevation: 0,
+          selectedItemColor: AppColors.gold,
+          unselectedItemColor: AppColors.textGray,
+          selectedLabelStyle: const TextStyle(fontWeight: FontWeight.bold, fontSize: 11),
+          unselectedLabelStyle: const TextStyle(fontSize: 10),
+          items: const [
+            BottomNavigationBarItem(
+              icon: Icon(Icons.home_rounded),
+              label: 'الرئيسية',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.camera_rounded),
+              label: 'لايف',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.map_rounded),
+              label: 'الخريطة',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.assignment_rounded),
+              label: 'التقارير',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.settings_rounded),
+              label: 'الإعدادات',
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}

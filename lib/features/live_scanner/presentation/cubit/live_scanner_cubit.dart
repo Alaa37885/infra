@@ -71,11 +71,10 @@ class LiveScannerCubit extends Cubit<LiveScannerState> {
     _isProcessingFrame = true;
 
     try {
-      final Uint8List dummyBytes = Uint8List(0);
       final lat = state.currentPosition?.latitude ?? 30.0444;
       final lng = state.currentPosition?.longitude ?? 31.2357;
 
-      final detections = await _aiInferenceService.detectRoadIssues(dummyBytes, lat: lat, lng: lng);
+      final detections = await _aiInferenceService.detectRoadIssues(image, lat: lat, lng: lng);
 
       if (!isClosed && state.isScanning && !state.isPaused) {
         int newCount = state.sessionDetectionsCount;
@@ -147,6 +146,7 @@ class LiveScannerCubit extends Cubit<LiveScannerState> {
 
   @override
   Future<void> close() async {
+    _aiInferenceService.dispose();
     await _cameraService.dispose();
     await _locationService.stopTracking();
     return super.close();
